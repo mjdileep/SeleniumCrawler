@@ -47,6 +47,7 @@ async def get_page(link: Link):
                     time.sleep(0.5)
                 return driver.page_source
             except Exception as ex:
+                print(ex)
                 try:
                     driver.close()
                 except:
