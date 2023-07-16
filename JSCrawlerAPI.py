@@ -46,7 +46,9 @@ async def get_page(link: Link):
             while not page_has_loaded() and time.time()-t < 60:
                 time.sleep(0.5)
             if time.time()-t > 60:
+                driver.close()
                 return ""
+            driver.close()
             return driver.page_source
         except Exception as ex:
             try:
