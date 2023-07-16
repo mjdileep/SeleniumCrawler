@@ -19,7 +19,6 @@ chrome_options.add_argument(f'user-agent={user_agent}')
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 
 token = "vLQja2SITLNdYQdphuMBer3423413213nj3n3jrnh3"
@@ -35,27 +34,26 @@ app = FastAPI()
 
 @app.post("/get_page/")
 async def get_page(link: Link):
-    global driver
     if link.token == token:
-        for i in range(2):
+        try:
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+            driver.get(link.url.strip())
+            t = time.time()
+
+            def page_has_loaded():
+                page_state = driver.execute_script('return document.readyState;')
+                return page_state == 'complete'
+            while not page_has_loaded() and time.time()-t < 60:
+                time.sleep(0.5)
+            if time.time()-t > 60:
+                return ""
+            return driver.page_source
+        except Exception as ex:
             try:
-                driver.get(link.url.strip())
-                t = time.time()
-                def page_has_loaded():
-                    page_state = driver.execute_script('return document.readyState;')
-                    return page_state == 'complete'
-                while not page_has_loaded() and time.time()-t < 60:
-                    time.sleep(0.5)
-                if time.time()-t > 60:
-                    return ""
-                return driver.page_source
-            except Exception as ex:
-                try:
-                    driver.close()
-                except:
-                    pass
-                driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-        return ""
+                driver.close()
+            except:
+                pass
+            return ""
     return "Unauthorized!"
 
 
