@@ -7,18 +7,19 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from selenium import webdriver
 import time
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 chrome_options = Options()
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' \
              '(KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
 
 chrome_options.add_argument(f'user-agent={user_agent}')
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("start-maximized")
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_argument("--disable-dev-shm-usage")
-driver = webdriver.Chrome(options=chrome_options)
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 
 token = "vLQja2SITLNdYQdphuMBer3423413213nj3n3jrnh3"
