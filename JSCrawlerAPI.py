@@ -54,6 +54,7 @@ async def get_page(link: Link):
                     driver.close()
                 except:
                     pass
+                driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         return ""
     return "Unauthorized!"
 
