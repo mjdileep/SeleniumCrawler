@@ -40,15 +40,16 @@ async def get_page(link: Link):
         for i in range(2):
             try:
                 driver.get(link.url.strip())
-
+                t = time.time()
                 def page_has_loaded():
                     page_state = driver.execute_script('return document.readyState;')
                     return page_state == 'complete'
-                while not page_has_loaded():
+                while not page_has_loaded() and time.time()-t < 60:
                     time.sleep(0.5)
+                if time.time()-t > 60:
+                    return ""
                 return driver.page_source
             except Exception as ex:
-                print(ex)
                 try:
                     driver.close()
                 except:
