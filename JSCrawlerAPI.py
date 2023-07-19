@@ -48,8 +48,9 @@ async def get_page(link: Link):
             if time.time()-t > 60:
                 driver.close()
                 return ""
+            source = driver.page_source
             driver.close()
-            return driver.page_source
+            return source
         except Exception as ex:
             try:
                 driver.close()
