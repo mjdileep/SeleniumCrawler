@@ -43,13 +43,14 @@ async def get_page(link: Link):
     if link.token == token:
         try:
             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+            driver.set_page_load_timeout(30)
             driver.get(link.url.strip())
             t = time.time()
 
             def page_has_loaded():
                 page_state = driver.execute_script('return document.readyState;')
                 return page_state == 'complete'
-            while not page_has_loaded() and time.time()-t < 60:
+            while not page_has_loaded() and time.time()-t < 30:
                 time.sleep(0.5)
             try:
                 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
