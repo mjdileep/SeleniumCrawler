@@ -16,6 +16,7 @@ from fastapi.exceptions import HTTPException
 from selenium.common.exceptions import TimeoutException
 
 
+
 chrome_options = Options()
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' \
              '(KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -73,5 +74,5 @@ async def get_page(link: Link):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app=app, host="0.0.0.0", port=8890, workers=5)
+    uvicorn.run(app='app', host="0.0.0.0", port=8890, workers=5)
 
