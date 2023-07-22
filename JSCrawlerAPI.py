@@ -8,7 +8,10 @@ from pydantic import BaseModel
 from selenium import webdriver
 import time
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 chrome_options = Options()
@@ -16,7 +19,7 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' \
              '(KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
 
 chrome_options.add_argument(f'user-agent={user_agent}')
-chrome_options.add_argument('--headless')
+#chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
@@ -45,9 +48,10 @@ async def get_page(link: Link):
                 return page_state == 'complete'
             while not page_has_loaded() and time.time()-t < 60:
                 time.sleep(0.5)
-            if time.time()-t > 60:
-                driver.close()
-                return ""
+            try:
+                WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'footer')))
+            except Exception as ex:
+                pass
             source = driver.page_source
             driver.close()
             return source
