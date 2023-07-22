@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from fastapi.exceptions import HTTPException
 
 
 chrome_options = Options()
@@ -62,8 +63,8 @@ async def get_page(link: Link):
                 driver.close()
             except:
                 pass
-            return ""
-    return "Unauthorized!"
+            return HTTPException(status_code=501, detail="Error occured")
+    return HTTPException(status_code=502, detail="Not allowed!")
 
 
 if __name__ == '__main__':
