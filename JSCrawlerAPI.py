@@ -53,12 +53,13 @@ async def get_page(link: Link):
             try:
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'footer')))
             except TimeoutException as ex:
+                print("Timeout:")
                 print(ex)
-                pass
             source = driver.page_source
             driver.close()
             return source
         except Exception as ex:
+            print("Other:")
             print(ex)
             try:
                 driver.close()
