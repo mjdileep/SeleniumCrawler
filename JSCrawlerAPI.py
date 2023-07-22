@@ -51,7 +51,8 @@ async def get_page(link: Link):
             while not page_has_loaded() and time.time()-t < 60:
                 time.sleep(0.5)
             try:
-                WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'footer')))
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'a')))
             except TimeoutException as ex:
                 print("Timeout:")
                 print(ex)
