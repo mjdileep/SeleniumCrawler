@@ -39,6 +39,7 @@ app = FastAPI()
 
 @app.post("/get_page/")
 async def get_page(link: Link):
+    print("Requested page:",link)
     if link.token == token:
         try:
             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
