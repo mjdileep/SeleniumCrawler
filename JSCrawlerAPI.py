@@ -51,6 +51,7 @@ async def get_page(link: Link):
             try:
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'footer')))
             except Exception as ex:
+                print(ex)
                 pass
             source = driver.page_source
             driver.close()
