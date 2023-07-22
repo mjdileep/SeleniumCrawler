@@ -13,6 +13,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from fastapi.exceptions import HTTPException
+from selenium.common.exceptions import TimeoutException
 
 
 chrome_options = Options()
@@ -51,7 +52,7 @@ async def get_page(link: Link):
                 time.sleep(0.5)
             try:
                 WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'footer')))
-            except Exception as ex:
+            except TimeoutException as ex:
                 print(ex)
                 pass
             source = driver.page_source
