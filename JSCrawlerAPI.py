@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from fastapi.exceptions import HTTPException
 from selenium.common.exceptions import TimeoutException
-
+from fastapi.responses import HTMLResponse
 
 
 chrome_options = Options()
@@ -61,7 +61,7 @@ async def get_page(link: Link):
                 print(ex)
             source = driver.page_source
             driver.close()
-            return source
+            return HTMLResponse(source)
         except Exception as ex:
             print("Other:")
             print(ex)
