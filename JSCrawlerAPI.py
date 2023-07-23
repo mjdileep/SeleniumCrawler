@@ -61,7 +61,7 @@ async def get_page(link: Link):
                 print(ex)
             source = driver.page_source
             driver.close()
-            return source
+            return str(source).replace("\\", "")
         except Exception as ex:
             print("Other:")
             print(ex)
