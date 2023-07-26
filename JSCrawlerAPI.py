@@ -43,6 +43,7 @@ async def get_page(link: Link):
     print("Requested page:",link)
     if link.token == token:
         try:
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
             driver.set_page_load_timeout(30)
             driver.get(link.url.strip())
             t = time.time()
@@ -73,6 +74,5 @@ async def get_page(link: Link):
 
 
 if __name__ == '__main__':
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=5)
 
