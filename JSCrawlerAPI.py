@@ -42,6 +42,11 @@ class Link(BaseModel):
 app = FastAPI()
 
 
+@app.get("/")
+async def index():
+    return "1"
+
+
 @app.post("/get_page/")
 async def get_page(link: Link):
     global driver
