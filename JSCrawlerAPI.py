@@ -30,8 +30,10 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 driver.set_page_load_timeout(30)
 
-
-token = "vLQja2SITLNdYQdphuMBer3423413213nj3n3jrnh3"
+try:
+    token = os.environ["crawler_token"]
+except:
+    token = "vLQja2SITLNdYQdphuMBer3423413213n#2!j3n3jrn43h3"
 
 
 class Link(BaseModel):
@@ -81,7 +83,7 @@ async def get_page(link: Link):
             source = driver.page_source
             return HTMLResponse(source)
         except Exception as ex:
-            return HTTPException(status_code=501, detail="Error occured")
+            return HTTPException(status_code=501, detail="Error occurred")
     return HTTPException(status_code=502, detail="Not allowed!")
 
 
