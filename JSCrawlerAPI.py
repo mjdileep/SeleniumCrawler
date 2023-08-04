@@ -15,6 +15,7 @@ from selenium.webdriver.common.by import By
 from fastapi.exceptions import HTTPException
 from selenium.common.exceptions import TimeoutException
 from fastapi.responses import HTMLResponse
+from selenium.common.exceptions import InvalidSessionIdException
 
 
 chrome_options = Options()
@@ -25,6 +26,8 @@ chrome_options.add_argument(f'user-agent={user_agent}')
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+driver.set_page_load_timeout(30)
 
 
 token = "vLQja2SITLNdYQdphuMBer3423413213nj3n3jrnh3"
@@ -40,12 +43,22 @@ app = FastAPI()
 
 @app.post("/get_page/")
 async def get_page(link: Link):
+    global driver
     print("Requested page:",link)
     if link.token == token:
         try:
-            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-            driver.set_page_load_timeout(30)
-            driver.get(link.url.strip())
+            try:
+                driver.get(link.url.strip())
+            except InvalidSessionIdException:
+                try:
+                    driver.close()
+                    driver.quit()
+                except:
+                    pass
+                driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+                driver.set_page_load_timeout(30)
+                driver.get(link.url.strip())
+
             t = time.time()
 
             def page_has_loaded():
@@ -60,15 +73,8 @@ async def get_page(link: Link):
                 print("Timeout:")
                 print(ex)
             source = driver.page_source
-            driver.close()
             return HTMLResponse(source)
         except Exception as ex:
-            print("Other:")
-            print(ex)
-            try:
-                driver.close()
-            except:
-                pass
             return HTTPException(status_code=501, detail="Error occured")
     return HTTPException(status_code=502, detail="Not allowed!")
 
