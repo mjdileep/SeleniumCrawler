@@ -80,5 +80,5 @@ async def get_page(link: Link):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=2)
+    uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=5)
 
