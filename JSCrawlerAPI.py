@@ -46,7 +46,7 @@ app = FastAPI()
 
 @app.get("/")
 async def index():
-    return "1"
+    return 1
 
 
 @app.post("/get_page/")
