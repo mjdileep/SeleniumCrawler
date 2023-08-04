@@ -16,7 +16,7 @@ from fastapi.exceptions import HTTPException
 from selenium.common.exceptions import TimeoutException
 from fastapi.responses import HTMLResponse
 from selenium.common.exceptions import InvalidSessionIdException
-import os
+import sys
 
 
 chrome_options = Options()
@@ -29,11 +29,6 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 driver.set_page_load_timeout(30)
-
-try:
-    token = os.environ["crawler_token"]
-except:
-    token = "vLQja2SITLNdYQdphuMBer3423413213n#2!j3n3jrn43h3"
 
 
 class Link(BaseModel):
@@ -89,9 +84,10 @@ async def get_page(link: Link):
 
 if __name__ == '__main__':
     try:
-        workers = int(os.environ["crawlers"])
-        print("Starting with {} workers".format(workers))
+        workers = int(sys.argv[1])
+        token = sys.argv[2]
     except:
-        workers=5
+        workers = 5
+        token = "vLQja2SITLNdYQdphuMBer3423413213nj3n3jrnh3"
     uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=workers)
 
