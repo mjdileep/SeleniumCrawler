@@ -16,6 +16,7 @@ from fastapi.exceptions import HTTPException
 from selenium.common.exceptions import TimeoutException
 from fastapi.responses import HTMLResponse
 from selenium.common.exceptions import InvalidSessionIdException
+import os
 
 
 chrome_options = Options()
@@ -80,5 +81,10 @@ async def get_page(link: Link):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=5)
+    try:
+        workers = int(os.environ["crawlers"])
+        print("Starting with {} workers".format(workers))
+    except:
+        workers=5
+    uvicorn.run(app='JSCrawlerAPI:app', host="0.0.0.0", port=8890, workers=workers)
 
