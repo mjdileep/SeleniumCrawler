@@ -46,7 +46,7 @@ async def index():
 
 @app.post("/get_page/")
 async def get_page(link: Link):
-    global driver
+    global driver, token
     print("Requested page:",link)
     if link.token == token:
         try:
